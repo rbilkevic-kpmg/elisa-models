@@ -42,10 +42,10 @@ def inv_logistic_4(y, a, b, c, d):
     return c * ((a - y) / (y - d)) ** (1 / b)
 
 
-# Fake data
+# Data
 x_graph = np.linspace(80, 0.1, 100)
 x = np.array([60, 30, 15, 7.5, 3.75, 1.875, 0.9375])
-a, b, c, d = 0.5, 2.5, 8, 9.1
+#a, b, c, d = 0.5, 2.5, 8, 9.1
 #y_true = logistic_4(x, a, b, c, d)
 y_meas = np.array([0.4295, 0.6265, 0.9585, 1.2785, 1.6825,  1.8275, 2.102])
 
@@ -58,7 +58,7 @@ print(p_optim[0])
 
 # Plot results
 plt.plot(x_graph, logistic_4(x_graph, *p_optim[0]), x, y_meas, 'o')
-plt.scatter(inv_logistic_4(np.array([1.07]), *p_optim[0]) ,np.array([1.07]), marker='+', c='red')
+#plt.scatter(inv_logistic_4(np.array([1.07]), *p_optim[0]) ,np.array([1.07]), marker='+', c='red')
 plt.legend(['Fit', 'Measured', 'Model'])
 plt.xlabel('Concentration')
 plt.ylabel('Density')
