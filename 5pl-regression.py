@@ -11,6 +11,7 @@ from utils import (
 def logistic_5(x, a, b, c, d, e):
     """
     5PL logistic equation
+
     :param nd_array x: signal value
     :param float a: minimum asymptote
     :param float b: Hills' slope
@@ -25,6 +26,7 @@ def logistic_5(x, a, b, c, d, e):
 def inv_logistic_5(y, a, b, c, d, e):
     """
     Inverse 5PL logistic equation
+
     :param nd_array y: response value
     :param float a: minimum asymptote
     :param float b: Hills' slope
@@ -44,22 +46,24 @@ x = np.array([60, 30, 15, 7.5, 3.75, 1.875, 0.9375])
 y_meas = np.array([0.4295, 0.6265, 0.9585, 1.2785, 1.6825, 1.8275, 2.102])
 
 # Initial set of parameters
-p_init = np.array([2, 4, 9, 5, 4])
+p_init = np.array([2, 4, 9, 1, 4])
 
 # Fit equation using least squares
 p_optim = leastsq(residuals_func(logistic_5), p_init, args=(y_meas, x))
 print(p_optim[0])
 y_pred = logistic_5(x, *p_optim[0])
+r_2 = r_squared_adj(y_meas, y_pred, len(x), len(p_optim))
 
 # Plot results
 plt.plot(x_graph, logistic_5(x_graph, *p_optim[0]), x, y_meas, 'o')
 # plt.scatter(inv_logistic_5(np.array([1.07]), *p_optim[0]) ,np.array([1.07]), marker='+', c='red')
 plt.legend(['Fit', 'Measured', 'Model'])
+plt.title('5 Point Linear Regression')
 plt.xlabel('Concentration')
 plt.ylabel('Density')
-# for i, (param, actual, est) in enumerate(zip('ABCF'), [a, b, c, d], p_optim[0])
+for i, (param, est) in enumerate(zip('ABCDE', p_optim[0])):
+    plt.text(65, 1.75 - i * 0.1, '{} = {:.2f}'.format(param, est))
+plt.text(x.min()+(x.max()-x.min()) * 0.05, y_meas.min()+(y_meas.max()-y_meas.min()), r"$Adj. R^2={:.3f}$".format(r_2))
 plt.show()
 
 # print(inv_logistic_4(np.array([1.07]), *p_optim[0]))
-
-print(r_squared_adj(y_meas, y_pred, len(x), len(p_optim)))
