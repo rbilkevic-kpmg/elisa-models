@@ -53,3 +53,19 @@ y_meas = np.array([0.4295, 0.6265, 0.9585, 1.2785, 1.6825,  1.8275, 2.102])
 
 # Initial set of parameters
 p_init = np.array([2, 4, 9, 5, 4])
+
+# Fit equation using least squares
+p_optim = leastsq(residuals, p_init, args=(y_meas, x))
+print(p_optim[0])
+
+# Plot results
+plt.plot(x_graph, logistic_5(x_graph, *p_optim[0]), x, y_meas, 'o')
+#plt.scatter(inv_logistic_5(np.array([1.07]), *p_optim[0]) ,np.array([1.07]), marker='+', c='red')
+plt.legend(['Fit', 'Measured', 'Model'])
+plt.xlabel('Concentration')
+plt.ylabel('Density')
+#for i, (param, actual, est) in enumerate(zip('ABCF'), [a, b, c, d], p_optim[0])
+plt.show()
+
+
+#print(inv_logistic_4(np.array([1.07]), *p_optim[0]))
