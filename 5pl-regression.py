@@ -2,6 +2,7 @@ import numpy as np
 from scipy.optimize import leastsq
 import matplotlib.pyplot as plt
 
+from utils import residuals_func
 
 def logistic_5(x, a, b, c, d, e):
     """
@@ -15,19 +16,6 @@ def logistic_5(x, a, b, c, d, e):
     :return: nd_array
     """
     return (a - d) / (1 + (x / c) ** b) ** e + d
-
-
-def residuals(p, y, x):
-    """
-    Deviations of the data from
-    :param tuple p: tuple of 4PL parameters
-    :param nd_array y: response value
-    :param nd_array x: signal value
-    :return: nd_array
-    """
-    a, b, c, d, e = p
-    err = y - logistic_5(x, a, b, c, d, e)
-    return err
 
 
 def inv_logistic_5(y, a, b, c, d, e):
@@ -55,7 +43,7 @@ y_meas = np.array([0.4295, 0.6265, 0.9585, 1.2785, 1.6825,  1.8275, 2.102])
 p_init = np.array([2, 4, 9, 5, 4])
 
 # Fit equation using least squares
-p_optim = leastsq(residuals, p_init, args=(y_meas, x))
+p_optim = leastsq(residuals_func(logistic_5), p_init, args=(y_meas, x))
 print(p_optim[0])
 
 # Plot results

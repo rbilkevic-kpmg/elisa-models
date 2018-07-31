@@ -2,6 +2,8 @@ import numpy as np
 from scipy.optimize import leastsq
 import matplotlib.pyplot as plt
 
+from utils import residuals_func
+
 
 def logistic_4(x, a, b, c, d):
     """
@@ -14,19 +16,6 @@ def logistic_4(x, a, b, c, d):
     :return: nd_array
     """
     return (a - d) / (1 + (x / c) ** b) + d
-
-
-def residuals(p, y, x):
-    """
-    Deviations of the data from
-    :param tuple p: tuple of 4PL parameters
-    :param nd_array y: response value
-    :param nd_array x: signal value
-    :return: nd_array
-    """
-    a, b, c, d = p
-    err = y - logistic_4(x, a, b, c, d)
-    return err
 
 
 def inv_logistic_4(y, a, b, c, d):
@@ -53,7 +42,7 @@ y_meas = np.array([0.4295, 0.6265, 0.9585, 1.2785, 1.6825,  1.8275, 2.102])
 p_init = np.array([2, 4, 9, 5])
 
 # Fit equation using least squares
-p_optim = leastsq(residuals, p_init, args=(y_meas, x))
+p_optim = leastsq(residuals_func(logistic_4), p_init, args=(y_meas, x))
 print(p_optim[0])
 
 # Plot results
