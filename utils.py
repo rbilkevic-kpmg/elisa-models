@@ -21,6 +21,20 @@ def residuals_func(func):
     return residuals
 
 
+def r_squared(y, y_pred):
+    """
+
+    :param y:
+    :param y_pred:
+    :return:
+    """
+    y_mean = np.mean(y)
+    ss_tot = np.dot((y - y_mean), (y - y_mean).transpose())
+    ss_reg = np.dot((y_pred - y_mean), (y_pred - y_mean).transpose())
+
+    return ss_reg / ss_tot
+
+
 def r_squared_adj(y, y_pred, n, k):
     """
 

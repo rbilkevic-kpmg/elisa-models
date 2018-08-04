@@ -5,7 +5,7 @@ import os
 
 from utils import (
     residuals_func,
-    r_squared_adj
+    r_squared
 )
 from data import CRPData
 plt.style.use('seaborn-paper')
@@ -55,7 +55,7 @@ p_init = np.array([1, 5])
 p_optim = leastsq(residuals_func(linear), p_init, args=(y_meas, x))
 print(p_optim[0])
 y_pred = linear(x, *p_optim[0])
-r_2 = r_squared_adj(y_meas, y_pred, len(x), len(p_optim))
+r_2 = r_squared(y_meas, y_pred)
 
 # Plot results
 plt.plot(x_graph, linear(x_graph, *p_optim[0]), x, y_meas, 'o')
