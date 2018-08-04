@@ -3,14 +3,12 @@ from scipy.optimize import leastsq
 import matplotlib.pyplot as plt
 import os
 
-plt.style.use('seaborn-paper')
-
-
 from utils import (
     residuals_func,
     r_squared_adj
 )
 from data import ElisaData
+plt.style.use('seaborn-paper')
 
 
 def logistic_4(x, a, b, c, d):
