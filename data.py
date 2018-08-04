@@ -22,3 +22,4 @@ class ElisaData:
                 self._sheet.cell(row=row, column=col).value = conc_data.pop(0)
 
         self._wb.save(self.elisa_data.replace('input\\', 'output\\').replace(".xlsx", "_result.xlsx"))
+        print("Output saved in output folder")

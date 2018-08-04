@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def residuals_func(func):
     """
     Deviations of the data from

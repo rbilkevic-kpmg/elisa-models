@@ -3,7 +3,7 @@ from scipy.optimize import leastsq
 import matplotlib.pyplot as plt
 import os
 
-#plt.style.use('seaborn-paper')
+plt.style.use('seaborn-paper')
 
 
 from utils import (
@@ -72,7 +72,6 @@ plt.ylabel('Net Optical Density')
 
 plt.text(x.min() + (x.max() - x.min()) * 0.05, y_meas.min() + (y_meas.max() - y_meas.min()),
          r"$Adj. R^2={:.3f}$".format(r_2))
-
 plt.show()
 
 concentrations = inv_logistic_4(np.array(elisa.DATA), *p_optim[0])

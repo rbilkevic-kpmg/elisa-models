@@ -1,17 +1,15 @@
 import numpy as np
 from scipy.optimize import leastsq
 import matplotlib.pyplot as plt
+import os
 
-#plt.style.use('seaborn-paper')
+plt.style.use('seaborn-paper')
 
 from utils import (
     residuals_func,
     r_squared_adj
 )
-from data import (
-    STANDARD_DATA,
-    DATA
-)
+from data import ElisaData
 
 
 def logistic_5(x, a, b, c, d, e):
@@ -44,13 +42,17 @@ def inv_logistic_5(y, a, b, c, d, e):
     return c * (((a - d) / (y - d)) ** (1 / e) - 1) ** (1 / b)
 
 
+# File
+file_name = [f for f in os.listdir('input\\') if f.endswith('.xlsx')][0]
+
 # Data
+elisa = ElisaData('input\\' + file_name)
 x = np.array([60, 30, 15, 7.5, 3.75, 1.875, 0.9375])
 x_range = x.max() - x.min()
 x_graph = np.linspace(x.min() - x_range * 0.25, x.max() + x_range * 0.25, 100)
 # a, b, c, d, e = 0.5, 2.5, 8, 9.1, 14
 # y_true = logistic_4(x, a, b, c, d)
-y_meas = np.array(STANDARD_DATA)
+y_meas = np.array(elisa.STANDARDS_DATA)
 y_range = y_meas.max() - y_meas.min()
 
 # Initial set of parameters
@@ -64,13 +66,14 @@ r_2 = r_squared_adj(y_meas, y_pred, len(x), len(p_optim))
 
 # Plot results
 plt.plot(x_graph, logistic_5(x_graph, *p_optim[0]), x, y_meas, 'o')
-# plt.scatter(inv_logistic_5(np.array([1.07]), *p_optim[0]) ,np.array([1.07]), marker='+', c='red')
 plt.legend(['Fit', 'Measured', 'Model'])
 plt.title('5 Point Linear Regression')
 plt.xlabel('8-OHdG Concentration, ng/ml')
 plt.ylabel('Net Optical Density')
 
-plt.text(x.min() + x_range * 0.05, y_meas.min() + y_range, r"$Adj. R^2={:.3f}$".format(r_2))
+plt.text(x.min() + (x.max() - x.min()) * 0.05, y_meas.min() + (y_meas.max() - y_meas.min()),
+         r"$Adj. R^2={:.3f}$".format(r_2))
 plt.show()
 
-# print(inv_logistic_4(np.array([1.07]), *p_optim[0]))
+concentrations = inv_logistic_5(np.array(elisa.DATA), *p_optim[0])
+elisa.write_concentrations(concentrations)
