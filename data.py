@@ -34,7 +34,7 @@ class CRPData:
         self._wb = openpyxl.load_workbook(filename=self.elisa_data, data_only=True)
         self._sheet = self._wb["End point_1"]
 
-        tmp = [self._sheet.cell(row=row, column=col).value for col in range(2, 14) for row in range(31, 35)]
+        tmp = [self._sheet.cell(row=row, column=col).value for col in range(2, 14) for row in range(24, 28)]
 
         self.STANDARDS_DATA = [tmp[0]] + tmp[2:8]
         self.DATA = tmp[8:]
@@ -42,7 +42,7 @@ class CRPData:
     def write_concentrations(self, conc_data):
         conc_data = 8 * [None] + list(conc_data)
         for col in range(2, 14):
-            for row in range(38, 42):
+            for row in range(31, 35):
                 self._sheet.cell(row=row, column=col).value = conc_data.pop(0)
 
         self._wb.save(self.elisa_data.replace('input\\', 'output\\').replace(".xlsx", "_result.xlsx"))
