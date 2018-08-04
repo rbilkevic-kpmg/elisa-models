@@ -1,11 +1,16 @@
 import numpy as np
 from scipy.optimize import leastsq
 import matplotlib.pyplot as plt
+import os
+
+#plt.style.use('seaborn-paper')
+
 
 from utils import (
     residuals_func,
     r_squared_adj
 )
+from data import ElisaData
 
 
 def logistic_4(x, a, b, c, d):
@@ -36,12 +41,18 @@ def inv_logistic_4(y, a, b, c, d):
     return c * ((a - y) / (y - d)) ** (1 / b)
 
 
+# File
+file_name = [f for f in os.listdir('input\\') if f.endswith('.xlsx')][0]
+
 # Data
-x_graph = np.linspace(80, 0.1, 100)
+elisa = ElisaData('input\\' + file_name)
 x = np.array([60, 30, 15, 7.5, 3.75, 1.875, 0.9375])
-# a, b, c, d = 0.5, 2.5, 8, 9.1
+x_range = x.max() - x.min()
+x_graph = np.linspace(x.min() - x_range * 0.25, x.max() + x_range * 0.25, 100)
+# a, b, c, d, e = 0.5, 2.5, 8, 9.1, 14
 # y_true = logistic_4(x, a, b, c, d)
-y_meas = np.array([0.4295, 0.6265, 0.9585, 1.2785, 1.6825, 1.8275, 2.102])
+y_meas = np.array(elisa.STANDARDS_DATA)
+y_range = y_meas.max() - y_meas.min()
 
 # Initial set of parameters
 p_init = np.array([2, 4, 9, 5])
@@ -56,10 +67,13 @@ r_2 = r_squared_adj(y_meas, y_pred, len(x), len(p_optim))
 plt.plot(x_graph, logistic_4(x_graph, *p_optim[0]), x, y_meas, 'o')
 plt.legend(['Model Fit', 'Measured'])
 plt.title('4 Point Linear Regression')
-plt.xlabel('Concentration')
-plt.ylabel('Density')
-for i, (param, est) in enumerate(zip('ABCD', p_optim[0])):
-    plt.text(65, 1.75 - i * 0.1, '{} = {:.2f}'.format(param, est))
-plt.text(x.min()+(x.max()-x.min()) * 0.05, y_meas.min()+(y_meas.max()-y_meas.min()), r"$Adj. R^2={:.3f}$".format(r_2))
+plt.xlabel('8-OHdG Concentration, ng/ml')
+plt.ylabel('Net Optical Density')
+
+plt.text(x.min() + (x.max() - x.min()) * 0.05, y_meas.min() + (y_meas.max() - y_meas.min()),
+         r"$Adj. R^2={:.3f}$".format(r_2))
 
 plt.show()
+
+concentrations = inv_logistic_4(np.array(elisa.DATA), *p_optim[0])
+elisa.write_concentrations(concentrations)
