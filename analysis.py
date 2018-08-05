@@ -184,7 +184,7 @@ plt.savefig('graphs\\scatter_whr_dnadmg', bbox_inches='tight', dpi=dpi)
 # X = data[["Is_Healthy", "Female", "DNA DAMAGE, %", "8OHDG", "WHR", "Age", "BMI"]]
 # y = data["CRP"]
 
-X = data[["WHR"]]
+X = data[["Body Fat, %", "Age"]]
 y = data["DNA DAMAGE, %"]
 
 X = sm.add_constant(X)
