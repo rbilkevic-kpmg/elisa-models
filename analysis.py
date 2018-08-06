@@ -25,7 +25,7 @@ def draw_scatter(x_n, y_n, dpi=200):
     pattern = re.compile('[\W_]+')
     x_n = pattern.sub('', x_n)
     y_n = pattern.sub('', y_n)
-    plt.savefig('graphs\\boxplot_{}_{}'.format(x_n.lower(), y_n.lower()), dpi=dpi)
+    plt.savefig('graphs\\scatter_{}_{}'.format(x_n.lower(), y_n.lower()), dpi=dpi)
 
 
 data = pd.read_excel('BMA analysis.xlsx', index_col=0)
@@ -66,18 +66,18 @@ draw_scatter(x_n='Body Fat, %', y_n='DNA DAMAGE, %')
 draw_scatter(x_n='WHR', y_n='DNA DAMAGE, %')
 
 #
-# X = data[["Is_Healthy", "Female", "DNA DAMAGE, %", "CRP", "WHR", "Age", "BMI"]]
+# X = data[["Is_Severe", "CRP", "Age"]]
 # y = data["8OHDG"]
 
-# X = data[["Is_Healthy", "Female", "DNA DAMAGE, %", "8OHDG", "WHR", "Age", "BMI"]]
+# X = data[["8OHDG", "Age"]]
 # y = data["CRP"]
 
-X = data[["Body Fat, %", "Age"]]
+X = data[["Is_Morbid", "Body Fat, %"]]
 y = data["DNA DAMAGE, %"]
 
 X = sm.add_constant(X)
 # Note the difference in argument order
-model = sm.OLS(y, X, missing='drop').fit()
+model = sm.OLS(y, X).fit()
 # predictions = model.predict(X) # make the predictions by the model
 
 # Print out the statistics
