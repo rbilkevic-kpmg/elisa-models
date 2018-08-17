@@ -30,11 +30,12 @@ def draw_scatter(x_n, y_n, dpi=200):
 
 data = pd.read_excel('BMA analysis.xlsx', index_col=0)
 
-data['Is_Healthy'] = [1 if row['Category'] == 'Healthy' else 0 for ix, row in data.iterrows()]
-data['Is_Obese'] = [1 if row['Category'] == 'Obese' else 0 for ix, row in data.iterrows()]
-data['Is_Severe'] = [1 if row['Category'] == 'Severe Obesity' else 0 for ix, row in data.iterrows()]
-data['Is_Morbid'] = [1 if row['Category'] == 'Morbidly Obese' else 0 for ix, row in data.iterrows()]
-data['Female'] = [1 if row['Gender'] == 'F' else 0 for ix, row in data.iterrows()]
+data['Is_Healthy'] = [1 if row == 'Healthy' else 0 for row in data['Category']]
+data['Is_Obese'] = [1 if row == 'Obese' else 0 for row in data['Category']]
+data['Is_Severe'] = [1 if row == 'Severe Obesity' else 0 for row in data['Category']]
+data['Is_Morbid'] = [1 if row == 'Morbidly Obese' else 0 for row in data['Category']]
+data['Female'] = [1 if row == 'F' else 0 for row in data['Gender']]
+data['CRP2'] = [row ** 2 for row in data['CRP']]
 
 data = data.dropna(axis=0)
 
@@ -49,21 +50,24 @@ draw_boxplot(col='8OHDG', categories='Is_Healthy')
 draw_boxplot(col='8OHDG', categories='Gender')
 draw_boxplot(col='CRP', categories='Is_Healthy')
 draw_boxplot(col='CRP', categories='Gender')
-draw_boxplot(col='DNA DAMAGE, %', categories='Is_Healthy')
-draw_boxplot(col='DNA DAMAGE, %', categories='Gender')
+draw_boxplot(col='BMA, %', categories='Is_Healthy')
+draw_boxplot(col='BMA, %', categories='Gender')
 
-draw_scatter(x_n='DNA DAMAGE, %', y_n='8OHDG')
+draw_scatter(x_n='BMA, %', y_n='8OHDG')
 draw_scatter(x_n='CRP', y_n='8OHDG')
 draw_scatter(x_n='BMI', y_n='8OHDG')
 draw_scatter(x_n='Body Fat, %', y_n='8OHDG')
 draw_scatter(x_n='WHR', y_n='8OHDG')
-draw_scatter(x_n='DNA DAMAGE, %', y_n='CRP')
-draw_scatter(x_n='BMI', y_n='CRP')
+draw_scatter(x_n='Age', y_n='8OHDG')
+draw_scatter(x_n='BMA, %', y_n='CRP')
+draw_scatter(x_n='BMI', y_n='CRP2')
 draw_scatter(x_n='Body Fat, %', y_n='CRP')
 draw_scatter(x_n='WHR', y_n='CRP')
-draw_scatter(x_n='BMI', y_n='DNA DAMAGE, %')
-draw_scatter(x_n='Body Fat, %', y_n='DNA DAMAGE, %')
-draw_scatter(x_n='WHR', y_n='DNA DAMAGE, %')
+draw_scatter(x_n='Age', y_n='CRP')
+draw_scatter(x_n='BMI', y_n='BMA, %')
+draw_scatter(x_n='Body Fat, %', y_n='BMA, %')
+draw_scatter(x_n='WHR', y_n='BMA, %')
+draw_scatter(x_n='Age', y_n='BMA, %')
 
 ##
 #
@@ -74,7 +78,7 @@ draw_scatter(x_n='WHR', y_n='DNA DAMAGE, %')
 # y = data["CRP"]
 
 X = data[["Is_Morbid", "Body Fat, %"]]
-y = data["DNA DAMAGE, %"]
+y = data["BMA, %"]
 
 X = sm.add_constant(X)
 # Note the difference in argument order
