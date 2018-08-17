@@ -65,7 +65,7 @@ draw_scatter(x_n='BMI', y_n='DNA DAMAGE, %')
 draw_scatter(x_n='Body Fat, %', y_n='DNA DAMAGE, %')
 draw_scatter(x_n='WHR', y_n='DNA DAMAGE, %')
 
-#
+##
 # X = data[["Is_Severe", "CRP", "Age"]]
 # y = data["8OHDG"]
 
