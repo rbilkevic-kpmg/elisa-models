@@ -47,17 +47,17 @@ data = pd.read_excel('BMA analysis.xlsx', index_col=0)
 graph_data = data[
     ['Gender', 'BMI', 'Category', 'WHR', 'Body Fat, %', 'CRP', '8OHDG', 'BMA, %']
 ]
-# sns.set(style="ticks", color_codes=True)
-# g = sns.pairplot(graph_data, hue="Category", plot_kws=
-#     {
-#     "s":30,
-#     "alpha":0.8,
-#     'lw':0.1,
-#     'edgecolor':'k'
-#     })
-# g.fig.set_size_inches(12, 10)
-# g.fig.subplots_adjust(bottom=0.1, left=0.07, right=0.86)
-# plt.show()
+sns.set(style="ticks", color_codes=True)
+g = sns.pairplot(graph_data, hue="Category", plot_kws=
+    {
+    "s":30,
+    "alpha":0.8,
+    'lw':0.1,
+    'edgecolor':'k'
+    })
+g.fig.set_size_inches(12, 10)
+g.fig.subplots_adjust(bottom=0.1, left=0.07, right=0.86)
+plt.show()
 
 data['Control'] = [1 if row == 'Control' else 0 for row in data['Category']]
 data['Obese'] = [1 if row == 'Obese' else 0 for row in data['Category']]
